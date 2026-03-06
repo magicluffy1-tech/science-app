@@ -79,15 +79,31 @@ with tab2:
             if st.button("✨ AI로 질문 유목화하기", type="primary"):
                 with st.spinner("AI가 질문을 분류하고 있습니다. 잠시만 기다려주세요..."):
                     try:
-                        # Prepare prompt
-                        question_list_str = "\n".join([f"- {q['question_text']}" for q in questions])
+                        # Prepare prompt (Now includes student names and explicit formatting instructions)
+                        question_list_str = "\n".join([f"- [{q['student_name']}] {q['question_text']}" for q in questions])
                         prompt = f"""
-                        다음은 중학생들이 과학 수업 시간에 작성한 질문들입니다. 
-                        이 질문들을 내용이 비슷한 것끼리 3~5개의 핵심 주제로 분류(유목화)해주세요.
-                        각 주제별로 어떤 질문들이 포함되는지 요약해서 보여주세요.
-                        출력 형식은 마크다운을 사용해서 깔끔하게 정리해주세요.
+                        다음은 중학교 과학 수업 시간에 학생들이 작성한 질문들입니다. 
+                        이 질문들을 내용이 비슷한 것끼리 3~5개의 **핵심 주제**로 분류해 주세요.
 
-                        [질문 목록]
+                        답변은 반드시 아래의 마크다운 형식을 엄격하게 지켜서 작성해 주세요:
+
+                        ---
+                        ### 📌 [주제명 1]
+                        **주제 요약**: 이 주제에 포함된 질문들의 공통적인 의도나 핵심 내용을 1~2줄로 요약해 주세요.
+
+                        **🙋‍♂️ 학생들의 질문:**
+                        - **[학생이름]**: 질문 내용
+                        - **[학생이름]**: 질문 내용
+
+                        ---
+                        ### 📌 [주제명 2]
+                        **주제 요약**: ... (위와 동일한 형식)
+
+                        **🙋‍♂️ 학생들의 질문:**
+                        - **[학생이름]**: 질문 내용
+                        ...
+
+                        [학생들의 질문 목록]
                         {question_list_str}
                         """
                         
